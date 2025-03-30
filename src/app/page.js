@@ -1,62 +1,34 @@
 "use client";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { Button } from "./ui/button";
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import BlockchainData from "./components/BlockchainData";
 import TokenCreation from "./components/TokenCreation";
+import TokenMinting from "./components/TokenMinting";
 
 export default function Home() {
-  const { connection } = useConnection();
-  const { publicKey, connected, disconnect, select, connecting } = useWallet();
-  const [balance, setBalance] = useState(0);
+    return (
+        <main className="min-h-screen bg-gray-100 p-6">
+            
+            {/* Header with Connect Wallet Button */}
+            <div className="flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">🔥 Solana dApp</h1>
+                <WalletMultiButton />
+            </div>
 
-  useEffect(() => {
-    if (publicKey) {
-      const fetchBalance = async () => {
-        try {
-          const balance = await connection.getBalance(publicKey);
-          setBalance(balance / 1e9);
-        } catch (error) {
-          console.error("Error fetching balance:", error);
-          toast.error("Failed to fetch balance!");
-        }
-      };
-      fetchBalance();
-    }
-  }, [publicKey, connection]);
+            {/* Blockchain Data Component - Balance & Transaction History */}
+            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
+                <BlockchainData />
+            </div>
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-4xl font-bold mb-6">🔥 Solana dApp</h1>
+            {/* Token Creation Component */}
+            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
+                <TokenCreation />
+            </div>
 
-      {!connected ? (
-        <Button
-          onClick={() => select("Phantom")}
-          disabled={connecting}
-          className="bg-blue-500 text-white p-4 rounded-lg shadow-lg hover:bg-blue-600"
-        >
-          {connecting ? "Connecting..." : "Connect Wallet"}
-        </Button>
-      ) : (
-        <div className="flex flex-col items-center gap-4">
-          <p className="text-lg">Wallet: {publicKey?.toBase58()}</p>
-          <p className="text-lg">Balance: {balance.toFixed(4)} SOL</p>
-
-          <Button
-            onClick={disconnect}
-            className="bg-red-500 text-white p-4 rounded-lg hover:bg-red-600"
-          >
-            Disconnect
-          </Button>
-        </div>
-      )}
-
-      {/* Token Creation Component */}
-      {connected && (
-        <div className="mt-10">
-          <TokenCreation />
-        </div>
-      )}
-    </div>
-  );
+            {/* Token Minting Component */}
+            <div className="p-6 bg-white shadow-md rounded-lg">
+                <TokenMinting />
+                
+            </div>
+        </main>
+    );
 }
