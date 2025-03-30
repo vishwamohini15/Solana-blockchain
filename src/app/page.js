@@ -1,20 +1,56 @@
 "use client";
-import React from "react";
-import WalletContextProvider from "./components/WalletContext";
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet, useConnection } from "@solana/wallet-adapter-react";
+import { Button } from "@/app/components/ui/button";
+import { useState, useEffect } from "react";
+import { PublicKey } from "@solana/web3.js";
+import toast from "react-toastify";
 
-const Home = () => {
+export default function Home() {
+  const { connection } = useConnection();
+  const { publicKey, connected, disconnect, select, connecting } = useWallet();
+  const [balance, setBalance] = useState(0);
+
+  // Fetch wallet balance
+  useEffect(() => {
+    if (publicKey) {
+      const fetchBalance = async () => {
+        try {
+          const balance = await connection.getBalance(publicKey);
+          setBalance(balance / 1e9); // Convert from lamports to SOL
+        } catch (error) {
+          console.error("Error fetching balance:", error);
+          toast.error("Failed to fetch balance!");
+        }
+      };
+      fetchBalance();
+    }
+  }, [publicKey, connection]);
+
   return (
-    <WalletContextProvider>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="p-8 bg-white shadow-lg rounded-lg">
-          <h1 className="text-2xl font-bold mb-4">Solana Dapp</h1>
-          <WalletMultiButton />
-          <p className="mt-4">Connect your wallet to interact with Solana blockchain.</p>
-        </div>
-      </div>
-    </WalletContextProvider>
-  );
-};
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <h1 className="text-3xl font-bold mb-4">Solana DApp</h1>
 
-export default Home;
+      {/* Wallet Connection Button */}
+      {!connected ? (
+        <Button
+          onClick={() => select("Phantom")}
+          disabled={connecting}
+          className="bg-blue-500 text-white p-4 rounded-lg shadow-lg hover:bg-blue-600"
+        >
+          {connecting ? "Connecting..." : "Connect Wallet"}
+        </Button>
+      ) : (
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-lg">Wallet: {publicKey?.toBase58()}</p>
+          <p className="text-lg">Balance: {balance.toFixed(4)} SOL</p>
+          <Button
+            onClick={disconnect}
+            className="bg-red-500 text-white p-4 rounded-lg hover:bg-red-600"
+          >
+            Disconnect
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}
