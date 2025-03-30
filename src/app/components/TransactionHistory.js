@@ -1,26 +1,62 @@
 "use client";
-
-import React from "react";
-import { useTransaction } from "./TransactionContext";
+import React, { useEffect, useState } from "react";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Connection, PublicKey } from "@solana/web3.js";
+import { toast } from "react-toastify";
 
 const TransactionHistory = () => {
-    const { transactions } = useTransaction();
+    const { publicKey, connected } = useWallet();
+    const [transactions, setTransactions] = useState([]);
+    
+    useEffect(() => {
+        const fetchTransactions = async () => {
+            if (connected && publicKey) {
+                const connection = new Connection("https://api.devnet.solana.com");
+
+                try {
+                    const confirmedSignatures = await connection.getSignaturesForAddress(
+                        new PublicKey(publicKey),
+                        { limit: 10 } // Last 10 transactions
+                    );
+
+                    const txDetails = await Promise.all(
+                        confirmedSignatures.map(async (sig) => {
+                            const tx = await connection.getTransaction(sig.signature);
+                            return {
+                                signature: sig.signature,
+                                blockTime: tx?.blockTime
+                                    ? new Date(tx.blockTime * 1000).toLocaleString()
+                                    : "N/A",
+                                slot: tx?.slot,
+                                status: tx?.meta?.err ? "Failed" : "Success",
+                            };
+                        })
+                    );
+
+                    setTransactions(txDetails);
+                } catch (error) {
+                    console.error("Error fetching transactions:", error);
+                    toast.error("Failed to fetch transactions!");
+                }
+            }
+        };
+
+        fetchTransactions();
+    }, [connected, publicKey]);
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md mx-auto mt-10">
-            <h2 className="text-2xl font-bold mb-4">📜 Transaction History</h2>
+        <div className="bg-white p-6 rounded-lg shadow-md w-full">
+            <h2 className="text-2xl font-bold mb-4">📝 Transaction History</h2>
             
             {transactions.length === 0 ? (
-                <p className="text-gray-500">No transactions found</p>
+                <p>No recent transactions found.</p>
             ) : (
-                <ul className="divide-y divide-gray-200">
+                <ul>
                     {transactions.map((tx, index) => (
-                        <li key={index} className="py-2">
-                            <p>🔗 Tx ID: <a href={`https://explorer.solana.com/tx/${tx.id}?cluster=devnet`} target="_blank" className="text-blue-500">{tx.id}</a></p>
-                            <p>From: {tx.from}</p>
-                            <p>To: {tx.to}</p>
-                            <p>Amount: {tx.amount} SOL</p>
-                            <p className="text-gray-400 text-sm">📅 {tx.timestamp}</p>
+                        <li key={index} className="border-b py-2">
+                            <p><strong>Signature:</strong> {tx.signature}</p>
+                            <p><strong>Block Time:</strong> {tx.blockTime}</p>
+                            <p><strong>Status:</strong> {tx.status}</p>
                         </li>
                     ))}
                 </ul>

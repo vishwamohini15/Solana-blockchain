@@ -1,5 +1,4 @@
 "use client";
-
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import BlockchainData from "./components/BlockchainData";
 import TokenCreation from "./components/TokenCreation";
@@ -9,6 +8,7 @@ import TransactionHistory from "./components/TransactionHistory";  // Transactio
 
 export default function Home() {
     return (
+        
         <main className="min-h-screen bg-gray-100 p-6">
             
             {/* Header with Connect Wallet Button */}
