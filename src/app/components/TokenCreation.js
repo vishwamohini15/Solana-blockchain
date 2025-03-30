@@ -1,59 +1,89 @@
 "use client";
 import { useState } from "react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { toast } from "react-toastify";
+import { Button } from "../ui/button";
 import { Keypair, Transaction, SystemProgram, LAMPORTS_PER_SOL } from "@solana/web3.js";
-import { useWallet, useConnection } from "@solana/wallet-adapter-react";
-import { Button } from "@/app/components/ui/button";   // ✅ Correct path
-
-
 
 const TokenCreation = () => {
-  const [minting, setMinting] = useState(false);
-  const wallet = useWallet();
+  const { publicKey, sendTransaction } = useWallet();
   const { connection } = useConnection();
+  const [tokenName, setTokenName] = useState("");
+  const [tokenSymbol, setTokenSymbol] = useState("");
+  const [tokenSupply, setTokenSupply] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleCreateToken = async () => {
-    if (!wallet.connected) {
+  const createToken = async () => {
+    if (!publicKey) {
       toast.error("Please connect your wallet first!");
       return;
     }
 
+    if (!tokenName || !tokenSymbol || !tokenSupply) {
+      toast.error("All fields are required!");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      toast.info("Creating token...");
-      const mint = new Keypair();
-      const tx = new Transaction().add(
+      const mint = Keypair.generate();
+      const transaction = new Transaction().add(
         SystemProgram.transfer({
-          fromPubkey: wallet.publicKey,
+          fromPubkey: publicKey,
           toPubkey: mint.publicKey,
-          lamports: 1 * LAMPORTS_PER_SOL,
+          lamports: LAMPORTS_PER_SOL * 0.01, // Fee for creating token
         })
       );
 
-      const signature = await wallet.sendTransaction(tx, connection);
-      await connection.confirmTransaction(signature, "confirmed");
-      toast.success("Token created successfully!");
+      const signature = await sendTransaction(transaction, connection);
+      await connection.confirmTransaction(signature, "processed");
+
+      toast.success(`Token ${tokenName} (${tokenSymbol}) created successfully!`);
     } catch (error) {
-      console.error("Error creating token:", error);
-      toast.error("Failed to create token.");
+      console.error("Token creation failed:", error);
+      toast.error("Failed to create token!");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-10 bg-gray-100 min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-6">Solana Token Management</h1>
-      
-      <div className="flex gap-4">
-        <Button onClick={handleCreateToken} className="bg-blue-500 text-white">
-          Create Token
-        </Button>
-        <Button className="bg-green-500 text-white" onClick={() => toast.info("Mint Token clicked!")}>
-          Mint Token
+    <div className="p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
+      <h2 className="text-2xl font-bold mb-4">🔥 Create New Token</h2>
+
+      <div className="flex flex-col gap-4">
+        <input
+          type="text"
+          placeholder="Token Name"
+          value={tokenName}
+          onChange={(e) => setTokenName(e.target.value)}
+          className="p-3 border rounded-lg"
+        />
+        <input
+          type="text"
+          placeholder="Token Symbol"
+          value={tokenSymbol}
+          onChange={(e) => setTokenSymbol(e.target.value)}
+          className="p-3 border rounded-lg"
+        />
+        <input
+          type="number"
+          placeholder="Initial Supply"
+          value={tokenSupply}
+          onChange={(e) => setTokenSupply(e.target.value)}
+          className="p-3 border rounded-lg"
+        />
+
+        <Button
+          onClick={createToken}
+          disabled={loading}
+          className="bg-green-500 text-white p-3 rounded-lg hover:bg-green-600"
+        >
+          {loading ? "Creating Token..." : "Create Token"}
         </Button>
       </div>
-      
     </div>
-
-    
   );
 };
 
