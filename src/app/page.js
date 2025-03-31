@@ -8,8 +8,7 @@ import TransactionHistory from "./components/TransactionHistory";  // Transactio
 
 export default function Home() {
     return (
-        
-        <main className=" background min-h-screen bg-gray-100 p-6">
+        <main className="background min-h-screen bg-gray-100 p-6">
             
             {/* Header with Connect Wallet Button */}
             <div className="title flex justify-between items-center mb-6">
@@ -17,29 +16,33 @@ export default function Home() {
                 <WalletMultiButton />
             </div>
 
-            {/* Blockchain Data Component - Balance & Transaction History */}
-            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
-                <BlockchainData />
-            </div>
+            {/* Responsive Layout */}
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                
+                {/* Blockchain Data */}
+                <div className="p-6 bg-white shadow-md rounded-lg">
+                    <BlockchainData />
+                </div>
 
-            {/* Token Creation Component */}
-            <div className=" p-6 bg-white shadow-md rounded-lg mb-6">
-                <TokenCreation />
-            </div>
+                {/* Token Creation */}
+                <div className="p-6 bg-white shadow-md rounded-lg">
+                    <TokenCreation />
+                </div>
 
-            {/* Token Minting Component */}
-            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
-                <TokenMinting />
-            </div>
+                {/* Token Minting */}
+                <div className="p-6 bg-white shadow-md rounded-lg">
+                    <TokenMinting />
+                </div>
 
-            {/* Send Tokens Component */}
-            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
-                <SendTokens />
-            </div>
+                {/* Send Tokens */}
+                <div className="p-6 bg-white shadow-md rounded-lg">
+                    <SendTokens />
+                </div>
 
-            {/* Transaction History Component */}
-            <div className="p-6 bg-white shadow-md rounded-lg">
-                <TransactionHistory />
+                {/* Transaction History */}
+                <div className="p-6 bg-white shadow-md rounded-lg col-span-2">
+                    <TransactionHistory />
+                </div>
             </div>
 
         </main>

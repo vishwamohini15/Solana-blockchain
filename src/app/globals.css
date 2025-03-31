@@ -1,29 +1,132 @@
 @import "tailwindcss";
 
-/* :root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* globals.css */
+
+/* Global Styles */
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #f3f4f6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  overflow-x: hidden;  /* Horizontal Scroll Hata Diya */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Components Styling */
+.p-6 {
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+/* Signature Wrapping */
+.signature {
+  word-wrap: break-word;       /* Signature Wrap */
+  overflow-wrap: break-word; 
+  max-width: 100%;
+  white-space: normal;
+}
+
+/* Responsive Tweaks */
+@media (max-width: 1024px) {
+  .title h1 {
+    font-size: 2rem;
+  }
+
+  .background {
+    padding: 20px;
+  }
+
+  .p-6 {
+    padding: 1rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Tablet: Single Column */
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-} */
+@media (max-width: 768px) {
+  .title {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .title h1 {
+    font-size: 1.8rem;
+  }
+
+  .background {
+    padding: 15px;
+  }
+
+  .p-6 {
+    padding: 0.75rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr; /* Mobile: Single Column */
+  }
+}
+
+@media (max-width: 480px) {
+  .title h1 {
+    font-size: 1.5rem;
+  }
+
+  .background {
+    padding: 10px;
+  }
+
+  .p-6 {
+    padding: 0.5rem;
+  }
+}
+
+
+
+
+.historyBox p {
+  word-wrap: break-word;       
+  overflow-wrap: break-word;    /* Prevent overflow */
+  white-space: normal;          /* Normal white space handling */
+  max-width: 100%;              /* Ensure it fits the container */
+  display: block;               /* Block display for full-width fit */
+}
+
+/* 📱 Responsive Design ke liye */
+@media (max-width: 768px) {
+  .historyBox p {
+      font-size: 14px;          /* Mobile pe thoda chhota text */
+      line-height: 1.4;         /* Better spacing */
+  }
+}
+
+
+
+
+
+
+
+
+
 
 .background{
   background-color:black;
