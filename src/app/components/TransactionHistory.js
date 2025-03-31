@@ -45,7 +45,7 @@ const TransactionHistory = () => {
     }, [connected, publicKey]);
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md w-full">
+        <div className="boxstyle bg-white p-6 rounded-lg shadow-md w-full">
             <h2 className="text-2xl font-bold mb-4">📝 Transaction History</h2>
             
             {transactions.length === 0 ? (
@@ -53,7 +53,7 @@ const TransactionHistory = () => {
             ) : (
                 <ul>
                     {transactions.map((tx, index) => (
-                        <li key={index} className="border-b py-2">
+                        <li key={index} className="historyBox border-b py-2">
                             <p><strong>Signature:</strong> {tx.signature}</p>
                             <p><strong>Block Time:</strong> {tx.blockTime}</p>
                             <p><strong>Status:</strong> {tx.status}</p>

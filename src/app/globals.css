@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-
-
-
-
-
 /* :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -30,6 +25,24 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 } */
 
+.background{
+  background-color:black;
+}
+
+.title{
+  color: red;
+  box-shadow: 5px 4px 13px 7px rgb(142, 142, 246);
+  background-color: white;
+}
+
+.boxstyle{
+  box-shadow: 2px 4px 15px 6px blue;
+}
+
+.historyBox{
+  box-shadow: 3px 3px 3px 3px rgb(184, 183, 183);
+}
+
 input {
   padding: 10px;
   border: 1px solid #ccc;
@@ -37,6 +50,7 @@ input {
   width: 100%;
   margin-bottom: 10px;
   font-size: 16px;
+  /* background-color: lightseagreen; */
 }
 
 ul {

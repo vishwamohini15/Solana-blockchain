@@ -49,7 +49,7 @@ const TokenCreation = () => {
   };
 
   return (
-    <div className="p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
+    <div className="boxstyle p-6 bg-white shadow-lg rounded-lg max-w-md mx-auto">
       <h2 className="text-2xl font-bold mb-4">🔥 Create New Token</h2>
 
       <div className="flex flex-col gap-4">

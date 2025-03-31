@@ -48,7 +48,7 @@ const SendToken = () => {
     };
 
     return (
-        <div className="p-6 bg-white shadow-md rounded-lg">
+        <div className="boxstyle p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-2xl font-bold mb-4">🚀 Send Token</h2>
 
             <div className="mb-4">

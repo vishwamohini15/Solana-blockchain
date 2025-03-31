@@ -9,11 +9,11 @@ import TransactionHistory from "./components/TransactionHistory";  // Transactio
 export default function Home() {
     return (
         
-        <main className="min-h-screen bg-gray-100 p-6">
+        <main className=" background min-h-screen bg-gray-100 p-6">
             
             {/* Header with Connect Wallet Button */}
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-3xl font-bold">🔥 Solana dApp</h1>
+            <div className="title flex justify-between items-center mb-6">
+                <h1 className="text-3xl font-bold">🔥 Solana App</h1>
                 <WalletMultiButton />
             </div>
 
@@ -23,7 +23,7 @@ export default function Home() {
             </div>
 
             {/* Token Creation Component */}
-            <div className="p-6 bg-white shadow-md rounded-lg mb-6">
+            <div className=" p-6 bg-white shadow-md rounded-lg mb-6">
                 <TokenCreation />
             </div>
 
